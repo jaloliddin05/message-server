@@ -41,13 +41,21 @@ export class UserService {
     return data;
   }
 
-  async getUserByName(name: string) {
+  async getUsersByName(name: string) {
     const data = await this.userRepository.find({
       where: {
         name: ILike(`%${name}%`),
       },
     });
     return data;
+  }
+
+  async getUserByName(name:string){
+    const data = await this.userRepository.findOne({where:{name}})
+    if(!data){
+      return false
+    }
+    return data
   }
 
   async remove(id: string) {
@@ -68,5 +76,14 @@ export class UserService {
   async create(data: CreateUserDto) {
     const response = this.userRepository.create(data);
     return await this.userRepository.save(response);
+  }
+
+  async userLogin(data:CreateUserDto){
+    const user = await this.getUserByName(data.name)
+    if(!user){
+    const newUser = await this.create(data)
+    return newUser
+    }
+    return user
   }
 }

@@ -7,4 +7,10 @@ export class User {
 
   @Column({ type: 'varchar' })
   name: string;
+
+  @Column({ type: 'boolean', default: false })
+  isOnline: boolean;
+
+  @Column({ type: 'text', nullable: true })
+  socketId: string;
 }

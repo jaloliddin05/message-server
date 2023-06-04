@@ -54,7 +54,7 @@ export class UserController {
     return this.userService.getOne(id);
   }
 
-  @Post('/')
+  @Post('/login')
   @ApiOperation({ summary: 'Method: creates new user' })
   @ApiCreatedResponse({
     description: 'The user was created successfully',
@@ -62,7 +62,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   async saveData(@Body() data: CreateUserDto) {
     try {
-      return await this.userService.create(data);
+      return await this.userService.userLogin(data);
     } catch (err) {
       throw new HttpException(err.message, err.status);
     }
