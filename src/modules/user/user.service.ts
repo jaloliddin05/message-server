@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, FindOptionsWhere, EntityManager } from 'typeorm';
+import { FindOptionsWhere, ILike } from 'typeorm';
 import {
   IPaginationOptions,
   Pagination,
@@ -15,7 +15,7 @@ Injectable();
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
   ) {}
 
   async getAll(
@@ -41,6 +41,15 @@ export class UserService {
     return data;
   }
 
+  async getUserByName(name: string) {
+    const data = await this.userRepository.find({
+      where: {
+        name: ILike(`%${name}%`),
+      },
+    });
+    return data;
+  }
+
   async remove(id: string) {
     const response = await this.userRepository.delete(id);
     return response;
@@ -57,8 +66,7 @@ export class UserService {
   }
 
   async create(data: CreateUserDto) {
-    const response = this.userRepository.create(data)
-    return await this.userRepository.save(response)
+    const response = this.userRepository.create(data);
+    return await this.userRepository.save(response);
   }
-
 }
