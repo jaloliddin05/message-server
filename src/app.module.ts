@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import configuration from './config';
 import { UserModule } from './modules/user/user.module';
 import { MessageModule } from './modules/message/message.module';
+import { ChatSocketModule } from './modules/web-socket/web-socket.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MessageModule } from './modules/message/message.module';
         configService.get('database'),
       inject: [ConfigService],
     }),
+    ChatSocketModule,
     MessageModule,
     UserModule,
   ],
