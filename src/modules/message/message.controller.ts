@@ -10,6 +10,7 @@ import {
   Param,
   Get,
   Query,
+  Req
 } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
 import {
@@ -36,9 +37,9 @@ export class MessageController {
     description: 'The messages were returned successfully',
   })
   @HttpCode(HttpStatus.OK)
-  async getData(@Route() route: string, @Query() query: PaginationDto) {
+  async getData(@Route() route: string, @Query() query: PaginationDto, @Req() req) {
     try {
-      return await this.messageService.getAll({ ...query, route });
+      return await this.messageService.getAll({ ...query, route },req.where);
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }

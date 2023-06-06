@@ -32,6 +32,24 @@ class PaginationDto {
   @Transform(parsePaginationQuery)
   readonly page: number = 1;
 
+  @ApiProperty({
+    description: `from`,
+    example: '',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  readonly from: string;
+
+  @ApiProperty({
+    description: `to`,
+    example: '',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  readonly to: string;
+
   constructor() {
     this.limit = this.limit ? this.limit : 100;
     this.page = this.page ? this.page : 1;

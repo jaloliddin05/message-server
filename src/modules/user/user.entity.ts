@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Message } from '../message/message.entity';
 
 @Entity('users')
 export class User {
@@ -13,4 +14,10 @@ export class User {
 
   @Column({ type: 'text', nullable: true })
   socketId: string;
+
+  @OneToMany(() => Message, (message) => message.from)
+  sendedMessages: Message[];
+
+  @OneToMany(() => Message, (message) => message.to)
+  inComingMessages: Message[];
 }

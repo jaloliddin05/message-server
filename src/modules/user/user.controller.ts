@@ -44,6 +44,16 @@ export class UserController {
     }
   }
 
+  @Get('/name')
+  @ApiOperation({ summary: 'Method: returns users by name' })
+  @ApiOkResponse({
+    description: 'The users was returned successfully',
+  })
+  @HttpCode(HttpStatus.OK)
+  async getByName(@Query('name') name: string): Promise<User[]> {
+    return this.userService.getUsersByName(name);
+  }
+
   @Get('/:id')
   @ApiOperation({ summary: 'Method: returns single user by id' })
   @ApiOkResponse({

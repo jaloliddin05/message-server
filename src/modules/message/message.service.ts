@@ -24,8 +24,9 @@ export class MessageService {
   ): Promise<Pagination<Message>> {
     return paginate<Message>(this.messageRepository, options, {
       order: {
-        name: 'ASC',
+        date: 'ASC',
       },
+      where,
     });
   }
 
@@ -37,7 +38,6 @@ export class MessageService {
     if (!data) {
       throw new HttpException('Data not found', HttpStatus.NOT_FOUND);
     }
-
     return data;
   }
 
@@ -57,7 +57,14 @@ export class MessageService {
   }
 
   async create(data: CreateMessageDto) {
-    const response = this.messageRepository.create(data);
-    return await this.messageRepository.save(response);
+    const response = this.messageRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Message)
+      .values(data as unknown as Message)
+      .returning('id')
+      .execute();
+
+    return response;
   }
 }
