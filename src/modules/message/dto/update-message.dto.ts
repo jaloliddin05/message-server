@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 class UpdateMessageDto {
   @ApiProperty({
@@ -16,6 +16,30 @@ class UpdateMessageDto {
   @IsOptional()
   @IsString()
   readonly body: string;
+
+  @ApiProperty({
+    description: `isViewed`,
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  readonly isViewed: boolean;
+
+  @ApiProperty({
+    description: `isFromTagged`,
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  readonly isFromTagged: boolean;
+
+  @ApiProperty({
+    description: `isToTagged`,
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  readonly isToTagged: boolean;
 }
 
 export default UpdateMessageDto;

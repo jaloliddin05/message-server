@@ -24,10 +24,20 @@ export class MessageService {
   ): Promise<Pagination<Message>> {
     return paginate<Message>(this.messageRepository, options, {
       order: {
-        date: 'ASC',
+        date: 'DESC',
       },
       where,
+      relations: {
+        from: true,
+      },
     });
+  }
+
+  async getInboxUnViewedMessagesCount(id: string) {
+    const count = await this.messageRepository.count({
+      where: { to: { id }, isViewed: false },
+    });
+    return count;
   }
 
   async getOne(id: string) {

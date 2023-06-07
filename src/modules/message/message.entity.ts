@@ -24,6 +24,12 @@ export class Message {
   @Column({ type: 'boolean', default: false })
   isViewed: boolean = false;
 
+  @Column({ type: 'boolean', default: false })
+  isFromTagged: boolean = false;
+
+  @Column({ type: 'boolean', default: false })
+  isToTagged: boolean = false;
+
   @ManyToOne(() => User, (user) => user.sendedMessages)
   @JoinColumn()
   from: User;

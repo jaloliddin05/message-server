@@ -51,7 +51,7 @@ class PaginationDto {
   readonly to: string;
 
   constructor() {
-    this.limit = this.limit ? this.limit : 100;
+    this.limit = this.limit ? this.limit : 10;
     this.page = this.page ? this.page : 1;
   }
 }

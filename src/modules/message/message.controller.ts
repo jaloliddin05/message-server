@@ -10,7 +10,7 @@ import {
   Param,
   Get,
   Query,
-  Req
+  Req,
 } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
 import {
@@ -37,9 +37,13 @@ export class MessageController {
     description: 'The messages were returned successfully',
   })
   @HttpCode(HttpStatus.OK)
-  async getData(@Route() route: string, @Query() query: PaginationDto, @Req() req) {
+  async getData(
+    @Route() route: string,
+    @Query() query: PaginationDto,
+    @Req() req,
+  ) {
     try {
-      return await this.messageService.getAll({ ...query, route },req.where);
+      return await this.messageService.getAll({ ...query, route }, req.where);
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -53,6 +57,20 @@ export class MessageController {
   @HttpCode(HttpStatus.OK)
   async getMe(@Param('id') id: string): Promise<Message> {
     return this.messageService.getOne(id);
+  }
+
+  @Get('/count-inbox/:userId')
+  @ApiOperation({ summary: 'Method: returns single message by id' })
+  @ApiOkResponse({
+    description: 'The message was returned successfully',
+  })
+  @HttpCode(HttpStatus.OK)
+  async getInBoxMessagesCount(@Param('userId') id: string) {
+    try {
+      return this.messageService.getInboxUnViewedMessagesCount(id);
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
   }
 
   @Post('/')
