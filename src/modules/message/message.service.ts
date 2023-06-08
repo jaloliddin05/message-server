@@ -10,12 +10,14 @@ import {
 import { Message } from './message.entity';
 import { MessageRepository } from './message.repository';
 import { CreateMessageDto, UpdateMessageDto } from './dto';
+import { UserService } from '../user/user.service';
 
 Injectable();
 export class MessageService {
   constructor(
     @InjectRepository(Message)
     private readonly messageRepository: MessageRepository,
+    private readonly userService: UserService,
   ) {}
 
   async getAll(
@@ -29,6 +31,7 @@ export class MessageService {
       where,
       relations: {
         from: true,
+        to: true,
       },
     });
   }
@@ -43,6 +46,10 @@ export class MessageService {
   async getOne(id: string) {
     const data = await this.messageRepository.findOne({
       where: { id },
+      relations: {
+        to: true,
+        from: true,
+      },
     });
 
     if (!data) {
@@ -67,6 +74,13 @@ export class MessageService {
   }
 
   async create(data: CreateMessageDto) {
+    const user = await this.userService.getUserByName(data.to);
+    if (user) {
+      data.to = user.id;
+    } else {
+      const newUser = await this.userService.create({ name: data.to });
+      data.to = newUser.id;
+    }
     const response = this.messageRepository
       .createQueryBuilder()
       .insert()

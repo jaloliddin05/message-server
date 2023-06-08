@@ -27,11 +27,11 @@ class CreateMessageDto {
 
   @ApiProperty({
     description: `to user`,
-    example: 'uuid',
+    example: 'Kaneki',
   })
   @IsNotEmpty()
   @IsString()
-  readonly to: string;
+  to: string;
 }
 
 export default CreateMessageDto;
