@@ -6,7 +6,7 @@ import { Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 class MessageQueryParerMiddleware implements NestMiddleware {
   use(req, res: Response, next: NextFunction) {
     let where: any = {};
-    const { from, to } = req.query;
+    const { from, to, isFromTagged, isToTagged } = req.query;
 
     if (from) {
       where.from = {
@@ -18,6 +18,13 @@ class MessageQueryParerMiddleware implements NestMiddleware {
         id: to,
       };
     }
+    if (isFromTagged || isFromTagged === false) {
+      where.isFromTagged = isFromTagged;
+    }
+    if (isToTagged || isToTagged === false) {
+      where.isToTagged = isToTagged;
+    }
+
     req.where = where;
     next();
   }

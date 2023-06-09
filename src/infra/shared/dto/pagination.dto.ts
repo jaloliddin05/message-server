@@ -1,4 +1,10 @@
-import { isNumber, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  isNumber,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, TransformFnParams } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
@@ -11,6 +17,14 @@ function parsePaginationQuery({ key, value }: TransformFnParams) {
     );
   }
   return int;
+}
+
+function parseStringToBoolean({ key, value }: TransformFnParams) {
+  const bool = value == 'false' ? false : value == 'true' ? true : '';
+  if (`${bool}`.length !== value.length) {
+    throw new BadRequestException(`${key} should be boolean`);
+  }
+  return bool;
 }
 
 class PaginationDto {
@@ -49,6 +63,24 @@ class PaginationDto {
   @IsOptional()
   @IsString()
   readonly to: string;
+
+  @ApiProperty({
+    description: `isFromTagged`,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(parseStringToBoolean)
+  readonly isFromTagged: boolean;
+
+  @ApiProperty({
+    description: `isToTagged`,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(parseStringToBoolean)
+  readonly isToTagged: boolean;
 
   constructor() {
     this.limit = this.limit ? this.limit : 10;
