@@ -44,6 +44,9 @@ export class MessageService {
   }
 
   async getOne(id: string) {
+    if (!id) {
+      throw new HttpException('Data not found', HttpStatus.NOT_FOUND);
+    }
     const data = await this.messageRepository.findOne({
       where: { id },
       relations: {

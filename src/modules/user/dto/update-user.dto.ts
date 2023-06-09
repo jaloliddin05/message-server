@@ -8,6 +8,14 @@ class UpdateUserDto {
   @IsOptional()
   @IsString()
   readonly name: string;
+
+  @ApiProperty({
+    description: `socketId`,
+    example: 'id',
+  })
+  @IsOptional()
+  @IsString()
+  readonly socketId: string;
 }
 
 export default UpdateUserDto;
