@@ -1,10 +1,4 @@
-import {
-  IsBoolean,
-  isNumber,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, TransformFnParams } from 'class-transformer';
 import { BadRequestException } from '@nestjs/common';
@@ -81,6 +75,24 @@ class PaginationDto {
   @IsBoolean()
   @Transform(parseStringToBoolean)
   readonly isToTagged: boolean;
+
+  @ApiProperty({
+    description: `firstId`,
+    example: '',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  readonly firstId: string;
+
+  @ApiProperty({
+    description: `secondName`,
+    example: '',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  readonly secondName: string;
 
   constructor() {
     this.limit = this.limit ? this.limit : 10;

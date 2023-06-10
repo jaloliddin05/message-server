@@ -49,6 +49,48 @@ export class MessageController {
     }
   }
 
+  @Get('/two-user/message')
+  @ApiOperation({ summary: 'Method: returns two user messages' })
+  @ApiOkResponse({
+    description: 'The messages were returned successfully',
+  })
+  @HttpCode(HttpStatus.OK)
+  async getTwoUserMessages(
+    @Route() route: string,
+    @Query() query: PaginationDto,
+  ) {
+    try {
+      return await this.messageService.getTwoUserMessages(
+        { ...query, route },
+        query.firstId,
+        query.secondName,
+      );
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('/tagged/message/:id')
+  @ApiOperation({ summary: 'Method: returns two user messages' })
+  @ApiOkResponse({
+    description: 'The messages were returned successfully',
+  })
+  @HttpCode(HttpStatus.OK)
+  async getTaggedMessages(
+    @Route() route: string,
+    @Query() query: PaginationDto,
+    @Param('id') id: string,
+  ) {
+    try {
+      return await this.messageService.getTaggedMessages(
+        { ...query, route },
+        id,
+      );
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Get('/:id')
   @ApiOperation({ summary: 'Method: returns single message by id' })
   @ApiOkResponse({

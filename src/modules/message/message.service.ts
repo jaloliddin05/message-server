@@ -61,6 +61,45 @@ export class MessageService {
     return data;
   }
 
+  async getTwoUserMessages(
+    options: IPaginationOptions,
+    firstId: string,
+    secondName: string,
+  ): Promise<Pagination<Message>> {
+    return paginate<Message>(this.messageRepository, options, {
+      order: {
+        date: 'DESC',
+      },
+      relations: {
+        from: true,
+        to: true,
+      },
+      where: [
+        { from: { id: firstId }, to: { name: secondName } },
+        { from: { name: secondName }, to: { id: firstId } },
+      ],
+    });
+  }
+
+  async getTaggedMessages(
+    options: IPaginationOptions,
+    id:string
+  ): Promise<Pagination<Message>> {
+    return paginate<Message>(this.messageRepository, options, {
+      order: {
+        date: 'DESC',
+      },
+      relations: {
+        from: true,
+        to: true,
+      },
+      where: [
+        { from: { id }, isFromTagged:true },
+        { isToTagged:true, to: { id }},
+      ],
+    });
+  }
+
   async remove(id: string) {
     const response = await this.messageRepository.delete(id);
     return response;
